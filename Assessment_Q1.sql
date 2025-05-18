@@ -18,8 +18,5 @@ WHERE
     AND p.id IS NOT NULL  -- Has at least one investment plan
 GROUP BY 
     u.id, u.first_name, u.last_name
-HAVING 
-    COUNT(DISTINCT CASE WHEN s.is_regular_savings = 1 THEN s.id END) > 0
-    AND COUNT(DISTINCT CASE WHEN p.is_a_fund = 1 THEN p.id END) > 0
 ORDER BY 
     total_deposits DESC;
