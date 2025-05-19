@@ -5,9 +5,9 @@ WITH customer_stats AS (
     SELECT 
         u.id AS customer_id,
         CONCAT(u.first_name, ' ', u.last_name) AS name,
-        EXTRACT(MONTH FROM AGE(CURRENT_DATE, u.date_joined)) AS tenure_months, -- Account tenure in months
+        EXTRACT(MONTH FROM AGE(CURRENT_DATE, u.date_joined)) AS tenure_months, -- Tenure in months
         COUNT(s.id) AS total_transactions, -- Total transactions count
-        SUM(s.confirmed_amount) / 100 AS total_transaction_value --To convert total transaction value from kobo to naira
+        SUM(s.confirmed_amount) / 100 AS total_transaction_value -- To convert total transaction value from kobo to naira
     FROM 
         users_customuser u
     LEFT JOIN 
