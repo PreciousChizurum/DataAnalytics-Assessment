@@ -4,18 +4,15 @@
 SELECT 
     u.id AS owner_id,
     CONCAT(u.first_name, ' ', u.last_name) AS name,
-    COUNT(DISTINCT CASE WHEN s.is_regular_savings = 1 THEN s.id END) AS savings_count,
-    COUNT(DISTINCT CASE WHEN p.is_a_fund = 1 THEN p.id END) AS investment_count,
-    SUM(s.confirmed_amount) / 100.0 AS total_deposits  -- Convert from kobo to naira
+    COUNT(DISTINCT s.id) AS savings_count,
+    COUNT(DISTINCT p.id) AS investment_count,
+    (SUM(s.confirmed_amount) + SUM(p.amount)) / 100 AS total_deposits -- To convert both amounts from kobo to naira
 FROM 
     users_customuser u
-LEFT JOIN 
-    savings_savingsaccount s ON u.id = s.owner_id
-LEFT JOIN 
-    plans_plan p ON u.id = p.owner_id
-WHERE 
-    s.confirmed_amount > 0  -- Filter for only funded savings account
-    AND p.id IS NOT NULL  -- Has at least one investment plan
+JOIN 
+    savings_savingsaccount s ON u.id = s.owner_id AND s.confirmed_amount > 0
+JOIN 
+    plans_plan p ON u.id = p.owner_id AND p.is_a_fund = 1 AND p.amount > 0
 GROUP BY 
     u.id, u.first_name, u.last_name
 ORDER BY 
