@@ -22,6 +22,7 @@ WITH latest_transactions AS (
     GROUP BY owner_id, account_type
 )
 
+-- Calculates inactivity days
 SELECT 
     owner_id AS customer_id,
     account_type,
